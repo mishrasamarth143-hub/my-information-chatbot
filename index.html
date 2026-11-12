@@ -26,20 +26,63 @@ button{padding:12px;background:#2563eb;color:white;border:0;border-radius:5px}
 </div>
 <script>
 const information = {
-"hello":"Hello! How can I help you?",
-"what is your name":"I am My Information Chatbot.",
-"what can you do":"I can answer questions from predefined information.",
-"thank you":"You're welcome!"
+  "hello": "Hello! How can I help you?",
+  "hi": "Hi there! How can I help you?",
+  "hey": "Hey! I'm here to help.",
+  "what is your name": "I am My Information Chatbot.",
+  "who are you": "I am My Information Chatbot.",
+  "what can you do": "I can answer a few predefined questions about me.",
+  "how are you": "I'm doing great, thanks for asking!",
+  "thank you": "You're welcome!",
+  "thanks": "You're welcome!",
+  "what is your age": "I don't have an age because I am a chatbot.",
+  "where are you from": "I am from this webpage and built to answer questions.",
+  "what are your hobbies": "I enjoy helping people and answering their questions.",
+  "what is your favorite color": "My favorite color is blue.",
+  "what is your purpose": "My purpose is to answer simple questions from predefined information.",
+  "who created you": "I was created as a sample information chatbot project.",
+  "are you a robot": "Yes, I am a chatbot designed to answer some basic questions.",
+  "default": "Sorry, I don't have that information yet. Try asking about my name, purpose, hobbies, or favorite color."
 };
-function ask(){
-let q=document.getElementById("question").value.toLowerCase().trim();
-if(!q)return;
-let answer=information[q]||"Sorry, I don't have this information yet.";
-document.getElementById("chat").innerHTML+=
-'<div class="user">You: '+q+'</div>'+
-'<div class="bot">Bot: '+answer+'</div>';
-document.getElementById("question").value="";
+
+function normalizeQuestion(value) {
+  return value.toLowerCase().trim().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ');
 }
+
+function getAnswer(question) {
+  const normalized = normalizeQuestion(question);
+
+  if (information[normalized]) return information[normalized];
+
+  for (const key in information) {
+    if (key !== 'default' && normalized.includes(key)) {
+      return information[key];
+    }
+  }
+
+  return information.default;
+}
+
+function ask() {
+  let q = document.getElementById('question').value.trim();
+  if (!q) return;
+
+  let answer = getAnswer(q);
+
+  document.getElementById('chat').innerHTML +=
+    '<div class="user">You: ' + q + '</div>' +
+    '<div class="bot">Bot: ' + answer + '</div>';
+
+  document.getElementById('question').value = '';
+  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+}
+
+const input = document.getElementById('question');
+input.addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    ask();
+  }
+});
 </script>
 </body>
 </html>
